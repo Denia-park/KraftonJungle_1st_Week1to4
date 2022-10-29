@@ -1,3 +1,4 @@
+import itertools
 import sys
 
 """
@@ -18,8 +19,6 @@ len_list, quiz_num_list = [
 ]
 
 length = len_list[0]
-answer_list = []
-check_arr = [False] * length
 
 
 def calculate_list_method(list):
@@ -33,20 +32,14 @@ def calculate_list_method(list):
     return sum
 
 
-def dfs(list, depth):
-    if depth >= length:
-        answer_list.append(calculate_list_method(list))
-        return
+nPr = itertools.permutations(quiz_num_list, length)
+per_list = list(nPr)
 
-    for i in range(length):
-        if not check_arr[i]:
-            check_arr[i] = True
-            list.append(quiz_num_list[i])
-            dfs(list, depth + 1)
-            list.pop()
-            check_arr[i] = False
+max_val = -1
 
+for temp_list in per_list:
+    rtval = calculate_list_method(temp_list)
+    if max_val < rtval:
+        max_val = rtval
 
-dfs([], 0)
-
-print(max(answer_list))
+print(max_val)
