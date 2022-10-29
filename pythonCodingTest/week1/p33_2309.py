@@ -1,3 +1,4 @@
+import itertools
 import sys
 
 """
@@ -18,29 +19,10 @@ q_list = [int(input()) for i in range(n)]
 
 q_list.sort()
 
-visit = [False] * 9
+combi_list = list(itertools.combinations(q_list, 7))
 
-answer_list = []
-
-
-def dfs(list, idx):
-    global answer_list
-    if len(list) >= 7:
-        if sum(list) == 100:
-            answer_list = list.copy()
-
-        return
-
-    for i in range(idx, 9):
-        if not visit[i]:
-            visit[i] = True
-            list.append(q_list[i])
-            dfs(list, i + 1)
-            list.pop()
-            visit[i] = False
-
-
-dfs([], 0)
-
-for i in answer_list:
-    print(i)
+for sub_list in combi_list:
+    if sum(sub_list) == 100:
+        for e in sub_list:
+            print(e)
+        break
