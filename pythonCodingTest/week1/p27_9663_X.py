@@ -12,13 +12,10 @@ n_queen(nth_row) : 재귀를 타면서 총 n개의 queen이 배치 되었는지 
 
 
 def is_ok_on(nth_row):
-    nth_col = put_queen_each_row[nth_row]
-
     for i in range(nth_row):
-        pre_row = i
-        pre_col = put_queen_each_row[pre_row]
-
-        if (nth_col == pre_col) or (nth_row - pre_row == abs(nth_col - pre_col)):
+        if (put_queen_each_row[nth_row] == put_queen_each_row[i]) or (
+            nth_row - i == abs(put_queen_each_row[nth_row] - put_queen_each_row[i])
+        ):
             return False
 
     return True
@@ -32,15 +29,27 @@ def n_queen(nth_row):
         return
 
     for col in range(needed_quene_num):
+        if not is_possible_put_queen_each_row[col]:
+            continue
+
         put_queen_each_row[nth_row] = col
 
-        if is_ok_on(nth_row):
+        if nth_row == 0:
+            is_possible_put_queen_each_row[col] = False
             n_queen(nth_row + 1)
+            is_possible_put_queen_each_row[col] = True
+
+        elif is_ok_on(nth_row):
+            is_possible_put_queen_each_row[col] = False
+            n_queen(nth_row + 1)
+            is_possible_put_queen_each_row[col] = True
 
 
 needed_quene_num = int(input())
 
 put_queen_each_row = [-1] * needed_quene_num
+is_possible_put_queen_each_row = [True] * needed_quene_num
+
 answer_count = 0
 
 n_queen(0)
