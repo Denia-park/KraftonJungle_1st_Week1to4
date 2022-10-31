@@ -16,12 +16,15 @@ def quick_sort(list, start_cursor, end_cursor):
         while list[pr] > list[pivot_idx]:
             pr -= 1
 
+        if pl <= pr:  # 조건문 추가
             list[pl], list[pr] = list[pr], list[pl]
             pl += 1
             pr -= 1
 
-    quick_sort(list, start_cursor, pr)
-    quick_sort(list, pl, end_cursor)
+    if start_cursor < pr:  # 조건문 추가
+        quick_sort(list, start_cursor, pr)
+    if pl < end_cursor:  # 조건문 추가
+        quick_sort(list, pl, end_cursor)
 
 
 print("Befor Sorting : ", quiz_list)
