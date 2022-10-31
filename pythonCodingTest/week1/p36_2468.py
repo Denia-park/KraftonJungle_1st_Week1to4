@@ -17,8 +17,6 @@ q = [list(map(int, sys.stdin.readline().split())) for i in range(n)]
 
 
 def dfs(row, col):
-    global temp_graph, temp_count
-
     if row < 0 or row >= n or col < 0 or col >= n or temp_graph[row][col] == 0:
         return
 
@@ -57,7 +55,7 @@ for i in range(n):
     temp_row = [0] * n
     temp_graph.append(temp_row)
 
-for water in range(1, max_height):
+for water in range(max_height + 1):
     change_water_height(water)
     temp_count = 0
     for row in range(n):
