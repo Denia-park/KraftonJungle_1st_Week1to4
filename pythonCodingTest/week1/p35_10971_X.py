@@ -25,10 +25,14 @@ def dfs(start_node, cur_node, deepth):
     global distance, min_distance
 
     if deepth >= n:
-        distance += graph_infos[cur_node][start_node]
-        if min_distance > distance:
-            min_distance = distance
-        return
+        if graph_infos[cur_node][start_node] != 0:
+            distance += graph_infos[cur_node][start_node]
+            if min_distance > distance:
+                min_distance = distance
+            distance -= graph_infos[cur_node][start_node]
+            return
+        else:
+            return
 
     for target_node in range(n):
         if not visited[target_node] and graph_infos[cur_node][target_node] != 0:
