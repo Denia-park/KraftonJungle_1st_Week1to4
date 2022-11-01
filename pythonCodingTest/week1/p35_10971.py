@@ -35,7 +35,11 @@ def dfs(start_node, cur_node, deepth):
             return
 
     for target_node in range(n):
-        if not visited[target_node] and graph_infos[cur_node][target_node] != 0:
+        if (
+            not visited[target_node]
+            and graph_infos[cur_node][target_node] != 0
+            and distance < min_distance
+        ):
             visited[target_node] = True
             distance += graph_infos[cur_node][target_node]
             dfs(start_node, target_node, deepth + 1)
