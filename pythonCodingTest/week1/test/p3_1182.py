@@ -3,34 +3,33 @@ import sys
 sys.setrecursionlimit(10000)
 
 
-def dfs(quiz_num, deepth, cur_idx, cur_sum):
-    global count, visited, quiz_element_list, n
+def dfs(quiz_num, deepth_limit, cur_idx, cur_sum):
+    global count, quiz_element_list
 
-    if deepth != 0 and cur_sum == quiz_num:
+    if cur_idx == deepth_limit and cur_sum == quiz_num:
         count += 1
-    elif deepth >= n:
+        return
+    elif cur_idx >= deepth_limit:
         return
 
     for idx in range(cur_idx, len(quiz_element_list)):
-        # visited[idx] = True
         each_element = quiz_element_list[idx]
 
-        dfs(quiz_num, deepth + 1, cur_idx + 1, cur_sum + each_element)
+        dfs(quiz_num, deepth_limit, idx + 1, cur_sum + each_element)
 
 
 def solve(quiz_num):
-    global count
+    global count, n
     count = 0
 
-    dfs(quiz_num, 0, 0, 0)
+    for limit_num in range(1, n + 1):
+        dfs(quiz_num, limit_num, 0, 0)
 
     return count
 
 
 n, quiz_num = list(map(int, sys.stdin.readline().split()))
 quiz_element_list = list(map(int, sys.stdin.readline().split()))
-
-visited = [False] * n
 
 count = 0
 
