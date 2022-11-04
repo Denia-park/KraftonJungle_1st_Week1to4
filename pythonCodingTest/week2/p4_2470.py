@@ -1,3 +1,4 @@
+import math
 import sys
 
 """
@@ -22,9 +23,10 @@ start_cursor = 0
 end_cursor = quiz_num_count - 1
 answer_list = []
 
-min_sum = 10_000_000
+min_sum = math.inf
 
-while start_cursor <= end_cursor:
+# 두개의 용액을 선택해야함 (= 같은 용액을 2번 선택하면 안됨)
+while start_cursor < end_cursor:
     small_val = quiz_num_list[start_cursor]
     big_val = quiz_num_list[end_cursor]
 
