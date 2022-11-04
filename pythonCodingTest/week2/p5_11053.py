@@ -16,20 +16,16 @@ q = list(map(int, sys.stdin.readline().split()))
 quiz_num_count = int(input())
 quiz_num_list = list(map(int, sys.stdin.readline().split()))
 
-quiz_num_list.sort()
 
-count = 1
-
-
-def bin_search_upper(list, start, key):
+def bin_search_left(list, key):
+    start = 0
     end = len(list) - 1
-    return_idx = -1
 
     while start <= end:
         mid = (start + end) // 2
         mid_val = list[mid]
 
-        if mid_val > key:
+        if mid_val >= key:
             return_idx = mid
             end = mid - 1
         else:
@@ -38,16 +34,14 @@ def bin_search_upper(list, start, key):
     return return_idx
 
 
-start_cursor = 0
-temp_min_val = quiz_num_list[0]
+answer_list = [quiz_num_list[0]]
 
-while True:
-    search_idx = bin_search_upper(quiz_num_list, start_cursor, temp_min_val)
-
-    if search_idx == -1:
-        print(count)
-        break
+for i in range(1, len(quiz_num_list)):
+    cur_val = quiz_num_list[i]
+    if answer_list[-1] < cur_val:
+        answer_list.append(cur_val)
     else:
-        start_cursor = search_idx
-        temp_min_val = quiz_num_list[search_idx]
-        count += 1
+        change_idx = bin_search_left(answer_list, cur_val)
+        answer_list[change_idx] = cur_val
+
+print(len(answer_list))
