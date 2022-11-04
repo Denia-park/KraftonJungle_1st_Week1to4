@@ -12,6 +12,8 @@ q = [list(map(int, sys.stdin.readline().split())) for i in range(n)]
 q = list(map(int, sys.stdin.readline().split()))
 # q = [1, 2, 3, 4, 5]
 """
+# 정답 코드 참고
+# https://st-lab.tistory.com/277
 
 # 집의 수 , 설치해야 하는 공유기 수 초기화
 house_num, wifi_num = list(map(int, sys.stdin.readline().split()))
@@ -24,9 +26,9 @@ for i in range(house_num):
 # x 좌표들을 정렬
 distance_list.sort()
 
-# 공유기의 설치 간격은 시작 집 , 끝 집 의 거리를 기준으로 잡음
-start_distance = distance_list[0]
-end_distance = distance_list[-1]
+# 공유기의 설치 간격은 0 ~ (끝 집 x 좌표 - 시작 집 x 좌표) 까지 가능하다.
+start_distance = 0
+end_distance = distance_list[-1] - distance_list[0]
 
 # 공유기 설치 최대 간격은 0으로 초기화
 max_distance = 0
