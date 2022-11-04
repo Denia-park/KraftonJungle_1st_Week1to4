@@ -23,27 +23,31 @@ check_num_list_len = q[2][0]
 check_num_list = q[3]
 
 
-def bin_search(list, key):
-    pl = 0
-    pr = len(list) - 1
+# def bin_search(list, key):
+#     pl = 0
+#     pr = len(list) - 1
 
-    while True:
-        pc = (pl + pr) // 2
+#     while True:
+#         pc = (pl + pr) // 2
 
-        center_val = list[pc]
+#         center_val = list[pc]
 
-        if center_val == key:
-            return 1
-        elif center_val < key:
-            pl = pc + 1
-        elif center_val > key:
-            pr = pc - 1
+#         if center_val == key:
+#             return 1
+#         elif center_val < key:
+#             pl = pc + 1
+#         elif center_val > key:
+#             pr = pc - 1
 
-        if pl > pr:
-            break
+#         if pl > pr:
+#             break
 
-    return 0
+#     return 0
 
 
 for key in check_num_list:
-    print(bin_search(num_list, key))
+    try:
+        temp_idx = num_list.index(key)
+        print(1)
+    except ValueError:
+        print(0)
