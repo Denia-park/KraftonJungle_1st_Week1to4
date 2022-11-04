@@ -19,19 +19,18 @@ quiz_num_list = list(map(int, sys.stdin.readline().split()))
 
 def bin_search_left(list, key):
     start = 0
-    end = len(list) - 1
+    end = len(list)
 
-    while start <= end:
+    while start < end:
         mid = (start + end) // 2
         mid_val = list[mid]
 
         if mid_val >= key:
-            return_idx = mid
-            end = mid - 1
+            end = mid
         else:
             start = mid + 1
 
-    return return_idx
+    return end
 
 
 answer_list = [quiz_num_list[0]]
