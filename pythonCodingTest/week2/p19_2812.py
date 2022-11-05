@@ -14,40 +14,46 @@ q = list(map(int, sys.stdin.readline().split()))
 # q = [1, 2, 3, 4, 5]
 """
 
-n, k = list(map(int, sys.stdin.readline().split()))
+n, max_delete_count = list(map(int, sys.stdin.readline().split()))
 quiz_num = sys.stdin.readline().rstrip()
 
 my_stack = deque()
 
 start_num = 0
-delete_num = 0
-for num_str in quiz_num:
-    num = int(num_str)
+cur_delete_count = 0
 
-    if delete_num >= k:
-        my_stack.append(num)
+
+def is_empty(my_stack):
+    return len(my_stack) <= 0
+
+
+for cur_num_str in quiz_num:
+    cur_num = int(cur_num_str)
+
+    if cur_delete_count >= max_delete_count:
+        my_stack.append(cur_num)
         continue
 
     while True:
-        if len(my_stack) != 0:
-            top_data = my_stack.pop()
-            if top_data < num:
-                delete_num += 1
-                if delete_num >= k:
-                    my_stack.append(num)
-                    break
-                else:
-                    continue
-            else:
-                my_stack.append(top_data)
-                my_stack.append(num)
-                break
-        else:
-            my_stack.append(num)
+        if is_empty(my_stack):
+            my_stack.append(cur_num)
             break
 
-my_str = ""
-for num in my_stack:
-    my_str += str(num)
+        top_data = my_stack.pop()
 
-print(my_str[: len(my_stack) - (k - delete_num)])
+        if top_data < cur_num:
+            cur_delete_count += 1
+            if cur_delete_count >= max_delete_count:
+                my_stack.append(cur_num)
+                break
+        else:
+            my_stack.append(top_data)
+            my_stack.append(cur_num)
+            break
+
+
+my_str = ""
+for cur_num in my_stack:
+    my_str += str(cur_num)
+
+print(my_str[: len(my_stack) - (max_delete_count - cur_delete_count)])
