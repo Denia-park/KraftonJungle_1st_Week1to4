@@ -13,7 +13,8 @@ q = [list(map(int, sys.stdin.readline().split())) for i in range(n)]
 q = list(map(int, sys.stdin.readline().split()))
 # q = [1, 2, 3, 4, 5]
 """
-
+# 정답 참조
+# https://etst.tistory.com/194
 
 shoot_position_num, animal_num, shoot_range = list(
     map(int, sys.stdin.readline().split())
@@ -52,6 +53,9 @@ for animal_pos in animal_position:
     max_x_distance = shoot_range - y
 
     bigger_idx = my_bisect_right(shoot_position_list, x - max_x_distance)
+
+    if bigger_idx >= shoot_position_num:
+        continue
 
     if shoot_position_list[bigger_idx] <= (x + max_x_distance):
         count += 1
