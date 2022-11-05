@@ -30,35 +30,33 @@ count = 0
 shoot_position_list.sort()
 
 
-def my_bisect_right(list, key):
-    start = 0
-    end = len(list)
-    while start < end:
-        mid = (start + end) // 2
-        if list[mid] < key:
-            start = mid + 1
-        else:
-            end = mid
-
-    return end
+def is_animal_x_in_shoot_range(animal_x, my_shoot_pos, max_x_distance):
+    return (animal_x == my_shoot_pos) or (
+        animal_x - max_x_distance
+    ) <= my_shoot_pos <= (animal_x + max_x_distance)
 
 
 for animal_pos in animal_position:
-    x = animal_pos[0]
-    y = animal_pos[1]
+    animal_x = animal_pos[0]
+    animal_y = animal_pos[1]
 
-    if y > shoot_range:
+    if animal_y > shoot_range:
         continue
 
-    max_x_distance = shoot_range - y
+    max_x_distance = shoot_range - animal_y
 
-    bigger_idx = my_bisect_right(shoot_position_list, x - max_x_distance)
+    start = 0
+    end = shoot_position_num - 1
 
-    if bigger_idx >= shoot_position_num:
-        continue
-
-    if shoot_position_list[bigger_idx] <= (x + max_x_distance):
-        count += 1
-        # print(x, y)
+    while start <= end:
+        mid = (start + end) // 2
+        my_shoot_pos = shoot_position_list[mid]
+        if is_animal_x_in_shoot_range(animal_x, my_shoot_pos, max_x_distance):
+            count += 1
+            break
+        elif animal_x < my_shoot_pos:
+            end = mid - 1
+        else:
+            start = mid + 1
 
 print(count)
