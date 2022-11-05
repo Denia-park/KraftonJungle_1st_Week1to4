@@ -28,6 +28,20 @@ animal_position = [
 count = 0
 shoot_position_list.sort()
 
+
+def my_bisect_right(list, key):
+    start = 0
+    end = len(list)
+    while start < end:
+        mid = (start + end) // 2
+        if list[mid] < key:
+            start = mid + 1
+        else:
+            end = mid
+
+    return end
+
+
 for animal_pos in animal_position:
     x = animal_pos[0]
     y = animal_pos[1]
@@ -35,13 +49,12 @@ for animal_pos in animal_position:
     if y > shoot_range:
         continue
 
-    smaller_idx = bisect_left(shoot_position_list, x)
+    max_x_distance = shoot_range - y
 
-    if (
-        abs(shoot_position_list[smaller_idx] - x) + y <= shoot_range
-        or abs(shoot_position_list[smaller_idx + 1] - x) + y <= shoot_range
-    ):
-        print(x, y)
+    bigger_idx = my_bisect_right(shoot_position_list, x - max_x_distance)
+
+    if shoot_position_list[bigger_idx] <= (x + max_x_distance):
         count += 1
+        # print(x, y)
 
 print(count)
