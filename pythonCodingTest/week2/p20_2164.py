@@ -75,7 +75,7 @@ class FixedQueue:
 n = int(input())
 command_list = [sys.stdin.readline().split() for _ in range(n)]
 
-my_queue = FixedQueue(100_000)
+my_queue = FixedQueue(2_000_001)
 
 for command_info in command_list:
     command = command_info[0]
