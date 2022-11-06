@@ -19,3 +19,5 @@ q = list(map(int, sys.stdin.readline().split()))
 
 n = int(input())  # 2
 tower_list = list(map(int, sys.stdin.readline().split()))
+
+print(n)
