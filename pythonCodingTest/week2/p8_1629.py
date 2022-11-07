@@ -15,12 +15,23 @@ q = list(map(int, sys.stdin.readline().split()))
 
 A, B, C = list(map(int, sys.stdin.readline().split()))
 
-new_A = A
-multiply_count = 0
-while multiply_count < B:
-    new_A *= A
-    multiply_count += 1
 
-    new_A %= C
+def divide_pow(base_num, pow_num, mod_num):
+    if pow_num == 1:
+        return base_num % mod_num
 
-print(new_A)
+    if pow_num % 2 == 0:
+        return (
+            divide_pow(base_num, pow_num // 2, mod_num)
+            * divide_pow(base_num, pow_num // 2, mod_num)
+        ) % mod_num
+    else:
+        pow_num = pow_num - 1
+        return (
+            divide_pow(base_num, 1, mod_num)
+            * divide_pow(base_num, pow_num // 2, mod_num)
+            * divide_pow(base_num, pow_num // 2, mod_num)
+        ) % mod_num
+
+
+print(divide_pow(A, B, C))
