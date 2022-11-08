@@ -20,4 +20,25 @@ q = list(map(int, sys.stdin.readline().split()))
 n = int(input())  # 2
 tower_list = list(map(int, sys.stdin.readline().split()))
 
-print(n)
+answer = [0] * n
+
+front_tower_stack = list()
+
+for cur_tower_idx, cur_tower_height in enumerate(tower_list):
+    while front_tower_stack:
+        pre_tower = front_tower_stack[-1]
+        pre_tower_idx = pre_tower[0]
+        pre_tower_height = pre_tower[1]
+
+        if pre_tower_height < cur_tower_height:
+            front_tower_stack.pop()
+        else:
+            answer[cur_tower_idx] = str(pre_tower_idx + 1)
+            front_tower_stack.append((cur_tower_idx, cur_tower_height))
+            break
+
+    if not front_tower_stack:
+        answer[cur_tower_idx] = "0"
+        front_tower_stack.append((cur_tower_idx, cur_tower_height))
+
+print(" ".join(answer))
