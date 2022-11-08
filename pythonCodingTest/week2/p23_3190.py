@@ -68,35 +68,44 @@ def is_range_out(coordi):
 
 snake_deque = deque()
 snake_deque.append((0, 0))
-snake_direc = RIGHT  # 1 , 2 , 3 , 4 => 1 top , 2 right , 3 bot , 4 left
+snake_head_direc = RIGHT  # 1 , 2 , 3 , 4 => 1 top , 2 right , 3 bot , 4 left
 
 time = 0
 
 while True:
     time += 1
 
-    temp_list = []
+    snake_move_list = []
 
-    for _ in range(len(snake_deque)):
-        cur_coordi = snake_deque.popleft()
-        new_coordi = change_coordi(cur_coordi, snake_direc)
-        snake_deque.append(new_coordi)
-        temp_list.append(new_coordi)
+    new_deque = deque()
+    head_coordi = snake_deque.popleft()
+    new_head_coordi = change_coordi(head_coordi, snake_head_direc)
+    new_deque.append(new_head_coordi)
+    snake_move_list.append(new_head_coordi)
+
+    body_coordi = 0
+
+    for idx in range(len(snake_deque) - 1):
+        body_coordi = snake_deque.popleft()
+        new_deque.append(body_coordi)
+        snake_move_list.append(body_coordi)
+
+    snake_deque = new_deque
 
     if snake_deque[0] in coordi_apple_list:
-        snake_deque.append(cur_coordi)
+        snake_deque.append(body_coordi)
 
     if is_range_out(snake_deque[0]):
         print(time)
         break
 
-    if snake_deque[0] in temp_list[1:]:
+    if snake_deque[0] in snake_move_list[1:]:
         print(time)
         break
 
     if time in direction_dict:
         change_direction = direction_dict[time]
         if change_direction == "L":
-            snake_direc = (snake_direc + 4 - 1) % 4
+            snake_head_direc = (snake_head_direc + 4 - 1) % 4
         elif change_direction == "D":
-            snake_direc = (snake_direc + 4 + 1) % 4
+            snake_head_direc = (snake_head_direc + 4 + 1) % 4
