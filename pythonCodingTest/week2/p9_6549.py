@@ -17,89 +17,56 @@ q = list(map(int, sys.stdin.readline().split()))
 # https://st-lab.tistory.com/255
 
 """
-가운데를 기준으로 분할하여 풀이 할 때 아래 4가지 과정만 유의하여 작성하면 된다. (구간 범위 [lo : hi])
+스택의 꼭대기 원소(top)가 가리키는 index의 막대 높이보다 현재 막대의 높이가 작은 경우 현재 막대의 높이보다 크거나 같은 원소는 모두 삭제(pop)하고, 그 다음 현재 막대의 index를 넣는다.(push)
 
-1. 가운데 위치를 구한다. ( mid = (lo + hi) / 2 )
-
-2. 가운데 위치를 기준으로 분할하여 왼쪽 구간의 넓이([lo : mid])와 오른쪽 구간의 넓이([mid : hi])를 구한다.
-
-3. 왼쪽과 오른쪽 중 큰 넓이를 변수에 저장한다.
-
-4. 변수에 저장된 넓이와 두 구간을 합친 구간([lo : hi])의 가장 큰 넓이를 구해 두 개 중 가장 큰 넓이를 반환한다.
+넓이는 ?
+"현재 막대의 높이보다 크거나 같은 원소는 모두 삭제(pop)" 이 과정에서 삭제하면서 넓이를 구한다.
 """
 
-# 분할 정복
+# 스택
 
 
-def get_mid_area(lo, hi, mid):
+def get_area(len):
     global height_list
+    my_stack = []
 
-    to_left = mid  # 중간 지점으로부터 왼쪽으로 갈 변수
-    to_right = mid  # 중간 지점으로부터 오른쪽으로 갈 변수
+    max_area = 0
 
-    height = height_list[mid]  # 높이
+    for idx in range(len):
+        #  이전 체인의 높이보다 현재 히스토그램 높이가 작거나 같을경우
+        #  i번째 막대보다 작은 이전 체인들을 pop하면서 최대 넓이를 구해준다.
 
-    # 초기 넓이 (구간 폭이 1)
-    max_area = height * 1
+        while my_stack and height_list[my_stack[-1]] >= height_list[idx]:
+            height = height_list[my_stack.pop()]  # 이전 체인의 높이
 
-    def get_max_area(max_area, height, to_left, to_right):
-        return max(max_area, height * (to_right - to_left + 1))
+            # pop한 뒤 그 다음의 이전체인이 만약 없다면 0번째 index 부터 (i-1)번째 인덱스까지가
+            # 유일한 폭이 된다. (폭은 i가 됨)
+            # 반면 스택이 비어있지 않다면 이는 pop한 높이보다 더 작은 높이를 갖는
+            # 체인이 들어있다는 것이므로 (i-1)번째 index에서 그 다음 이전 체인의 index를
+            # 빼준 것이 폭이 된다.
 
-    # 양 끝 범위를 벗어나기 전까지 반복
-    while lo < to_left and to_right < hi:
-        # 양쪽 다음칸의 높이 중 높은 값을 선택
-        # 갱신되는 height는 기존 height보다 작거나 같은 값
+            if not my_stack:
+                width = idx
+            else:
+                width = idx - 1 - my_stack[-1]
 
-        if height_list[to_left - 1] < height_list[to_right + 1]:
-            to_right += 1
-            height = min(height, height_list[to_right])
+            max_area = max(max_area, height * width)  # 최대 넓이 값 갱신
+
+        my_stack.append(idx)
+
+    # 위 과정이 끝나고 Stack에 남아있는 체인들이 존재할 수 있으므로 나머지도 위와같은 과정을 거친다.
+    while my_stack:
+        height = height_list[my_stack.pop()]
+
+        # 만약 pop하고 난 뒤 스택이 비어있다면 이는 남아있는 체인이 없다는 뜻이고
+        # 고로 0 ~ (len - 1) 까지인 전체 폭이 width가 되는 것이다.
+
+        if not my_stack:
+            width = len
         else:
-            to_left -= 1
-            height = min(height, height_list[to_left])
+            width = len - 1 - my_stack[-1]
 
-        # 최대 넓이 갱신
-        max_area = get_max_area(max_area, height, to_left, to_right)
-
-    while to_right < hi:
-        to_right += 1
-        height = min(height, height_list[to_right])
-        max_area = get_max_area(max_area, height, to_left, to_right)
-
-    while lo < to_left:
-        to_left -= 1
-        height = min(height, height_list[to_left])
-        max_area = get_max_area(max_area, height, to_left, to_right)
-
-    return max_area
-
-
-def get_area(lo, hi):
-    global height_list
-
-    # 막대 폭(넓이)이 1일경우 높이가 넓이가 되므로 바로 반환
-    if lo == hi:
-        return height_list[lo]
-
-    # 1번 과정
-    mid = (lo + hi) // 2  # 중간 지점
-
-    # 2번 과정
-    # mid를 기점으로 양쪽으로 나눈다.
-    # 양쪽 구간 중 큰 넓이를 저장한다.
-    # 왼쪽 : lo ~ mid
-    # 오른쪽 : mid + 1 ~ hi
-
-    left_area = get_area(lo, mid)
-    right_area = get_area(mid + 1, hi)
-
-    # 3번 과정
-    max_area = max(left_area, right_area)
-
-    # 4번 과정
-    # 반드시 분할되어 구해진 넓이가 최대값이라는 보장이 없다 => 양쪽 구간을 합친 구간내에서
-    # mid를 기준으로 양쪽으로 뻗어나가면서 두 구간 사이의 겹친 넓이를 탐색해야함
-
-    max_area = max(max_area, get_mid_area(lo, hi, mid))
+        max_area = max(max_area, height * width)  # 최대 넓이 값 갱신
 
     return max_area
 
@@ -114,4 +81,4 @@ while True:
 
     height_list = quiz_list[1:]
 
-    print(get_area(0, len(height_list) - 1))
+    print(get_area(n))
