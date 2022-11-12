@@ -18,7 +18,7 @@ q = list(map(int, sys.stdin.readline().split()))
 
 
 def dijkstra(graph_infos, start_city):
-    global my_priority_q, cost_infos, visited
+    global my_priority_q, cost_infos
 
     start_city_arrrive_cost = 0
     cost_infos[start_city] = start_city_arrrive_cost
@@ -27,16 +27,17 @@ def dijkstra(graph_infos, start_city):
     while my_priority_q:
         temp_city_arrive_cost, temp_city = heapq.heappop(my_priority_q)
 
+        # 이미 큐에 temp_city 관련 내용들이 많이 들어가 있는 상태에서
+        # cost_infos[temp_city]가 업데이트 되면 그 쓸모없는 애들의 for문을
+        # 거를수가 없기 때문에 시간초과가 나는 듯 하다.
+        if cost_infos[temp_city] < temp_city_arrive_cost:
+            continue
+
         for next_city_info in graph_infos[temp_city]:
             next_city_arrrive_cost, next_city = next_city_info
 
-            if (
-                not visited[next_city]
-                and cost_infos[next_city]
-                > temp_city_arrive_cost + next_city_arrrive_cost
-            ):
+            if cost_infos[next_city] > temp_city_arrive_cost + next_city_arrrive_cost:
                 cost_infos[next_city] = temp_city_arrive_cost + next_city_arrrive_cost
-                visited[next_city] = True
                 heapq.heappush(my_priority_q, (cost_infos[next_city], next_city))
 
 
@@ -49,7 +50,6 @@ START_CITY, DESTINATION_CITY = list(map(int, sys.stdin.readline().split()))
 graph_infos = [[] for _ in range(CITY_NUM + 1)]
 
 cost_infos = [10**9] * (CITY_NUM + 1)
-visited = [False] * (CITY_NUM + 1)
 
 my_priority_q = []
 
