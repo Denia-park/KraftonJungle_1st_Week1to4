@@ -39,15 +39,17 @@ def find_parent(parents, element):
 
     return parents[element]
 
-
+# 내 부모의 부모를 바꿔줘야 내 부모를 참조하고 있는 모든 노드들이
+# 바뀐 부모를 참조하게 되면서 진정한 Union이 된다. => 부모가 제대로 바뀐다.
+# 부모가 제대로 바뀌어야 두개가 합집합이 되었다고 볼 수 있다.
 def union_parent(parents, ele1, ele2):
     ele1_parent = find_parent(parents, ele1)
     ele2_parent = find_parent(parents, ele2)
 
     if ele1_parent < ele2_parent:
-        parents[ele2] = ele1_parent
+        parents[ele2_parent] = ele1_parent
     else:
-        parents[ele1] = ele2_parent
+        parents[ele1_parent] = ele2_parent
 
 
 for info in graph_sort_infos:
