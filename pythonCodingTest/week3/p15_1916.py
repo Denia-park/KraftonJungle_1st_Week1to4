@@ -18,7 +18,7 @@ q = list(map(int, sys.stdin.readline().split()))
 
 
 def dijkstra(graph_infos, start_city):
-    global my_priority_q, cost_infos
+    global my_priority_q, cost_infos, visited
 
     start_city_arrrive_cost = 0
     cost_infos[start_city] = start_city_arrrive_cost
@@ -30,8 +30,13 @@ def dijkstra(graph_infos, start_city):
         for next_city_info in graph_infos[temp_city]:
             next_city_arrrive_cost, next_city = next_city_info
 
-            if cost_infos[next_city] > temp_city_arrive_cost + next_city_arrrive_cost:
+            if (
+                not visited[next_city]
+                and cost_infos[next_city]
+                > temp_city_arrive_cost + next_city_arrrive_cost
+            ):
                 cost_infos[next_city] = temp_city_arrive_cost + next_city_arrrive_cost
+                visited[next_city] = True
                 heapq.heappush(my_priority_q, (cost_infos[next_city], next_city))
 
 
@@ -44,6 +49,7 @@ START_CITY, DESTINATION_CITY = list(map(int, sys.stdin.readline().split()))
 graph_infos = [[] for _ in range(CITY_NUM + 1)]
 
 cost_infos = [10**9] * (CITY_NUM + 1)
+visited = [False] * (CITY_NUM + 1)
 
 my_priority_q = []
 
