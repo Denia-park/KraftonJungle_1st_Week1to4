@@ -1,4 +1,4 @@
-from collections import deque
+import heapq
 import sys
 
 sys.setrecursionlimit(10**6)
@@ -17,23 +17,22 @@ q = list(map(int, sys.stdin.readline().split()))
 """
 
 
-def bfs(graph_infos, city):
-    global my_deque, cost_infos
+def dijkstra(graph_infos, start_city):
+    global my_priority_q, cost_infos
 
-    cost = 0
-    my_deque.append(city)
-    cost_infos[city] = cost
+    start_city_arrrive_cost = 0
+    cost_infos[start_city] = start_city_arrrive_cost
+    heapq.heappush(my_priority_q, (start_city_arrrive_cost, start_city))
 
-    while my_deque:
-        temp_city = my_deque.popleft()
+    while my_priority_q:
+        temp_city_arrive_cost, temp_city = heapq.heappop(my_priority_q)
 
         for next_city_info in graph_infos[temp_city]:
-            next_city_num = next_city_info[0]
-            next_city_cost = next_city_info[1]
+            next_city_arrrive_cost, next_city = next_city_info
 
-            if cost_infos[next_city_num] > cost_infos[temp_city] + next_city_cost:
-                cost_infos[next_city_num] = cost_infos[temp_city] + next_city_cost
-                my_deque.append(next_city_num)
+            if cost_infos[next_city] > temp_city_arrive_cost + next_city_arrrive_cost:
+                cost_infos[next_city] = temp_city_arrive_cost + next_city_arrrive_cost
+                heapq.heappush(my_priority_q, (cost_infos[next_city], next_city))
 
 
 CITY_NUM = int(input())
@@ -44,17 +43,17 @@ START_CITY, DESTINATION_CITY = list(map(int, sys.stdin.readline().split()))
 # 0번 인덱스는 사용하지 않는다.
 graph_infos = [[] for _ in range(CITY_NUM + 1)]
 
-cost_infos = [10**6] * (CITY_NUM + 1)
+cost_infos = [10**9] * (CITY_NUM + 1)
 
-my_deque = deque()
+my_priority_q = []
 
 for info in problem_infos:
     temp_start_city = info[0]
     temp_destination_city = info[1]
     temp_cost = info[2]
 
-    graph_infos[temp_start_city].append((temp_destination_city, temp_cost))
+    graph_infos[temp_start_city].append((temp_cost, temp_destination_city))
 
-bfs(graph_infos, START_CITY)
+dijkstra(graph_infos, START_CITY)
 
 print(cost_infos[DESTINATION_CITY])
