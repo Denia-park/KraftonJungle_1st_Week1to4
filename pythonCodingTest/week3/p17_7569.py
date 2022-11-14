@@ -26,14 +26,13 @@ q = list(map(int, sys.stdin.readline().split()))
 
 
 def print_result(day_count):
-    global total_check_count
     for t_h in range(TOTAL_HEIGHT):
         for t_r in range(TOTAL_ROW):
             for t_c in range(TOTAL_COL):
                 if problem_infos[t_h][t_r][t_c] == 0:
                     return print(-1)
 
-    if total_check_count == 0:
+    if check_count == 0:
         return print(0)
     else:
         return print(day_count - 1)
@@ -50,22 +49,33 @@ def is_out_of_table(height, row, col):
     )
 
 
-def bfs(height, row, col, day_count):
-    global check_count, my_q, total_check_count
+def bfs():
+    global check_count, my_q, day_count
 
-    for direc in directions:
-        v_h, v_r, v_c = direc
+    for t_h in range(TOTAL_HEIGHT):
+        for t_r in range(TOTAL_ROW):
+            for t_c in range(TOTAL_COL):
+                if problem_infos[t_h][t_r][t_c] == day_count:
+                    my_q.append((t_h, t_r, t_c, day_count))
 
-        e_h = height + v_h
-        e_r = row + v_r
-        e_c = col + v_c
+    while my_q:
+        cur_h, cur_r, cur_c, cur_day = my_q.popleft()
 
-        if is_out_of_table(e_h, e_r, e_c):
-            continue
+        for direc in directions:
+            v_h, v_r, v_c = direc
 
-        if problem_infos[e_h][e_r][e_c] == 0:
-            problem_infos[e_h][e_r][e_c] = day_count
-            check_count += 1
+            e_h = cur_h + v_h
+            e_r = cur_r + v_r
+            e_c = cur_c + v_c
+
+            if is_out_of_table(e_h, e_r, e_c):
+                continue
+
+            if problem_infos[e_h][e_r][e_c] == 0:
+                day_count = cur_day + 1
+                check_count += 1
+                problem_infos[e_h][e_r][e_c] = day_count
+                my_q.append((e_h, e_r, e_c, day_count))
 
 
 TOTAL_COL, TOTAL_ROW, TOTAL_HEIGHT = list(map(int, sys.stdin.readline().split()))
@@ -77,26 +87,10 @@ problem_infos = [
 # 6방향을 고려해야 한다. 상 하 좌 우 윗층 아랫층
 # 변화가 없는 날이 종료되는 날
 check_count = 0
-total_check_count = 0
 day_count = 1
 my_q = deque()
 directions = [(0, -1, 0), (0, 1, 0), (0, 0, -1), (0, 0, 1), (1, 0, 0), (-1, 0, 0)]
 
-while True:
-    check_count = 0
-
-    for t_h in range(TOTAL_HEIGHT):
-        for t_r in range(TOTAL_ROW):
-            for t_c in range(TOTAL_COL):
-                if problem_infos[t_h][t_r][t_c] == day_count:
-                    bfs(t_h, t_r, t_c, day_count + 1)
-
-    total_check_count += check_count
-
-    if check_count == 0:
-        break
-
-    day_count += 1
-
+bfs()
 
 print_result(day_count)
