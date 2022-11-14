@@ -28,22 +28,17 @@ def bfs():
     global my_q
 
     bk_room = 0
+    cur_r = 0
+    cur_c = 0
     graph[0][0] = VISITED
-    heapq.heappush(my_q, (-VISITED, 0, 0))  # 최대 힙
+    heapq.heappush(my_q, (bk_room, cur_r, cur_c))
 
     while my_q:
-        open_state, cur_r, cur_c = heapq.heappop(my_q)  # 최대 힙
-
-        open_state = -open_state  # 최대 힙이라서 - 곱해줌
-        cur_r = -cur_r  # 최대 힙이라서 - 곱해줌
-        cur_c = -cur_c  # 최대 힙이라서 - 곱해줌
+        bk_room, cur_r, cur_c = heapq.heappop(my_q)
 
         if cur_r == ROW_COL_NUM - 1 and cur_c == ROW_COL_NUM - 1:
             print(bk_room)
             return
-
-        if open_state == BLOCKED:
-            bk_room += 1
 
         for direc in directions:
             v_r, v_c = direc
@@ -55,8 +50,12 @@ def bfs():
                 continue
 
             if graph[e_r][e_c] != VISITED:
-                heapq.heappush(my_q, (-graph[e_r][e_c], -e_r, -e_c))  # 최대 힙
-                graph[e_r][e_c] = VISITED
+                if graph[e_r][e_c] == BLOCKED:
+                    graph[e_r][e_c] = VISITED
+                    heapq.heappush(my_q, (bk_room + 1, e_r, e_c))
+                else:
+                    graph[e_r][e_c] = VISITED
+                    heapq.heappush(my_q, (bk_room, e_r, e_c))
 
 
 ROW_COL_NUM = int(input())
