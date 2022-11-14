@@ -41,35 +41,26 @@ def calculate_q(original_q):
     my_q = original_q.copy()
     temp_numbers_deque = my_numbers_deque.copy()
 
-    count = 0
-    temp_answer = 0
+    while len(temp_numbers_deque) != 1:
+        value1 = temp_numbers_deque.popleft()
+        value2 = temp_numbers_deque.popleft()
+        operator = my_q.popleft()
 
-    while temp_numbers_deque:
-        if count % 3 == 0:
-            value1 = temp_numbers_deque.popleft()
-        elif count % 3 == 1:
-            operator = my_q.popleft()
-        elif count % 3 == 2:
-            value2 = temp_numbers_deque.popleft()
+        if operator == "+":
+            temp_value = value1 + value2
+        elif operator == "-":
+            temp_value = value1 - value2
+        elif operator == "*":
+            temp_value = value1 * value2
+        elif operator == "//":
+            if (value1 / value2) <= 0:
+                temp_value = math.ceil(value1 / value2)
+            else:
+                temp_value = math.floor(value1 / value2)
 
-            if operator == "+":
-                temp_value = value1 + value2
-            elif operator == "-":
-                temp_value = value1 - value2
-            elif operator == "*":
-                temp_value = value1 * value2
-            elif operator == "//":
-                if (value1 / value2) <= 0:
-                    temp_value = math.ceil(value1 / value2)
-                else:
-                    temp_value = math.floor(value1 / value2)
+        temp_numbers_deque.appendleft(temp_value)
 
-            temp_numbers_deque.appendleft(temp_value)
-            temp_answer = temp_value
-        # deque(['+', '+', '//', '-', '*'])
-        count += 1
-
-    return temp_answer
+    return temp_numbers_deque.popleft()
 
 
 def dfs(my_q):
