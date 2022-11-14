@@ -15,3 +15,5 @@
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+
+my_temp_test.py
