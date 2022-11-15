@@ -50,10 +50,12 @@ for cur_test_case_num in range(TEST_CASE_NUM):
         graph[node_a].append(node_b)
         graph[node_b].append(node_a)
 
-    temp_start_noed = 1
-    temp_color = RED
-    visited[1] = temp_color
-    dfs(graph, temp_start_noed, temp_color)
+    # ★★★ 모든 노드들에 대해서 고려를 해줘야 한다. ★★★
+    for temp_start_noed in range(1, NODE_NUM):
+        if visited[temp_start_noed] == -1:
+            temp_color = RED
+            visited[1] = temp_color
+            dfs(graph, temp_start_noed, temp_color)
 
 for temp_answer in answer:
     print(temp_answer)
