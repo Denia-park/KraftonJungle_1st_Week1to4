@@ -67,7 +67,7 @@ for _ in range(EDGE_NUM):
     graph[n_b].append(n_a)
 
 for start_node in range(1, NODE_NUM + 1):
-    if inside_places[start_node] == OUTSIDE:
+    if inside_places[start_node] == OUTSIDE and not visited[start_node]:
         count += bfs(graph, start_node)
 
 print(count)
