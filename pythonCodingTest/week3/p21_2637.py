@@ -20,25 +20,33 @@ FINISH_NUM = int(input())
 LINE_NUM = int(input())
 
 part_data_infos = [[] for _ in range(FINISH_NUM + 1)]
-# answer = [[0] * (FINISH_NUM + 1) for _ in range(FINISH_NUM + 1)]
 answer = [0] * (FINISH_NUM + 1)
+indgree = [0] * (FINISH_NUM + 1)
 
 mid_part_min = 101
 for _ in range(LINE_NUM):
     PART_NUM, ORIGIN_PART_NUM, NEED_NUM = list(map(int, sys.stdin.readline().split()))
     mid_part_min = min(PART_NUM, mid_part_min)
     part_data_infos[PART_NUM].append((ORIGIN_PART_NUM, NEED_NUM))
+    indgree[PART_NUM] += 1
 
 for info in part_data_infos[FINISH_NUM]:
     temp_part_num, temp_need_num = info
     answer[temp_part_num] += temp_need_num
 
-for idx in range(FINISH_NUM - 1, mid_part_min - 1, -1):
+for idx in range(FINISH_NUM - 1, -1, -1):
+    if indgree[idx] == 0:
+        continue
+
     while answer[idx] > 0:
         answer[idx] -= 1
         for info in part_data_infos[idx]:
             temp_part_num, temp_need_num = info
             answer[temp_part_num] += temp_need_num
 
-for idx in range(1, mid_part_min):
+
+for idx in range(1, FINISH_NUM):
+    if indgree[idx] != 0:
+        continue
+
     print(f"{idx} {answer[idx]}")
