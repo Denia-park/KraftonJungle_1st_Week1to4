@@ -25,7 +25,7 @@ directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 
 
 def is_out_of_map(r, c):
-    return r < 0 or r >= ROW or c < 0 or c >= COL
+    return r < 0 or r >= ROW_COL or c < 0 or c >= ROW_COL
 
 
 def bfs():
@@ -55,17 +55,17 @@ def bfs():
                 heapq.heappush(priority_que, wating_que.popleft())
 
 
-ROW, COL = list(map(int, sys.stdin.readline().split()))
+ROW_COL, TRASH = list(map(int, sys.stdin.readline().split()))
 
-map_data = [list(map(int, sys.stdin.readline().split())) for _ in range(ROW)]
+map_data = [list(map(int, sys.stdin.readline().split())) for _ in range(ROW_COL)]
 TIME, NEED_ROW, NEED_COL = list(map(int, sys.stdin.readline().split()))
 
 wating_que = deque()
 priority_que = []
 my_time = 0
 
-for r in range(ROW):
-    for c in range(COL):
+for r in range(ROW_COL):
+    for c in range(ROW_COL):
         if map_data[r][c] != 0:
             data = (map_data[r][c], r, c)
             heapq.heappush(priority_que, data)
