@@ -49,7 +49,7 @@ def bfs():
                 data = (virus_num, edit_r, edit_c)
                 wating_que.append(data)
 
-        if priority_que:
+        if not priority_que:
             my_time += 1
             while wating_que:
                 heapq.heappush(priority_que, wating_que.popleft())
