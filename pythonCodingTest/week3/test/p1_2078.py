@@ -15,24 +15,20 @@ q = list(map(int, sys.stdin.readline().split()))
 # q = [1, 2, 3, 4, 5]
 """
 
-# 메모리 초과 나서 못 풀었습니다 ㅠㅠ
+l_val, r_val = list(map(int, sys.stdin.readline().split()))
 
-def dfs(left_val, right_val, l_count, r_count):
-    if left_val > L or right_val > R:
-        return
-    elif left_val == L and right_val == R:
-        print(l_count, r_count)
-        return
+l_c = 0
+r_c = 0
 
-    if left_val + right_val > max(L, R):
-        return
+while True:
+    if l_val == 1 and r_val == 1:
+        break
 
-    dfs(left_val + right_val, right_val, l_count + 1, r_count)
-    dfs(left_val, left_val + right_val, l_count, r_count + 1)
+    if r_val > l_val:
+        r_val = r_val - l_val
+        r_c += 1
+    elif r_val < l_val:
+        l_val = l_val - r_val
+        l_c += 1
 
-
-L, R = list(map(int, sys.stdin.readline().split()))
-
-init_count = 0
-
-dfs(1, 1, init_count, init_count)
+print(l_c, r_c)
