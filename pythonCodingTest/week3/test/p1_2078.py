@@ -15,6 +15,7 @@ q = list(map(int, sys.stdin.readline().split()))
 # q = [1, 2, 3, 4, 5]
 """
 
+# 메모리 초과 나서 못 풀었습니다 ㅠㅠ
 
 def dfs(left_val, right_val, l_count, r_count):
     if left_val > L or right_val > R:
