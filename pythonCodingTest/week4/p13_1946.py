@@ -14,6 +14,9 @@ q = list(map(int, sys.stdin.readline().split()))
 # q = [1, 2, 3, 4, 5]
 """
 
+# 정답 참고
+# https://sanghyu.tistory.com/36
+
 TEST_CASE_NUM = int(input())
 
 for _ in range(TEST_CASE_NUM):
@@ -25,19 +28,14 @@ for _ in range(TEST_CASE_NUM):
 
     test_infos.sort()
 
-    pass_people = []
+    pass_people = None
 
-    for tester_info in test_infos:
-        if not pass_people:
-            pass_people.append(tester_info)
-        else:
-            temp_count = 0
-            for pass_info in pass_people:
-                if pass_info[0] < tester_info[0] and pass_info[1] < tester_info[1]:
-                    break
-                temp_count += 1
+    max_rank = test_infos[0][1]
 
-            if len(pass_people) == temp_count:
-                pass_people.append(tester_info)
+    for idx in range(1, len(test_infos)):
+        cur_tester_max_rank = test_infos[idx][1]
+        if max_rank > cur_tester_max_rank:
+            count += 1
+            max_rank = cur_tester_max_rank
 
-    print(len(pass_people))
+    print(count)
