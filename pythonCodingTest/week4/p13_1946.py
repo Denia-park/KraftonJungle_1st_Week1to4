@@ -16,9 +16,6 @@ q = list(map(int, sys.stdin.readline().split()))
 
 TEST_CASE_NUM = int(input())
 
-priority_que = []
-# max_score_people
-
 for _ in range(TEST_CASE_NUM):
     PEOPLE_NUM = int(input())
     test_infos = [
@@ -26,23 +23,21 @@ for _ in range(TEST_CASE_NUM):
     ]
     count = 1
 
-    for info in test_infos:
-        a_rank, b_rank = info
-        sum_rank = a_rank + b_rank
+    test_infos.sort()
 
-        data = (sum_rank, a_rank, b_rank)
-        heapq.heappush(priority_que, data)
+    pass_people = []
 
-    sum_rank, a_rank, b_rank = heapq.heappop(priority_que)
+    for tester_info in test_infos:
+        if not pass_people:
+            pass_people.append(tester_info)
+        else:
+            temp_count = 0
+            for pass_info in pass_people:
+                if pass_info[0] < tester_info[0] and pass_info[1] < tester_info[1]:
+                    break
+                temp_count += 1
 
-    standard_man = (a_rank, b_rank)
+            if len(pass_people) == temp_count:
+                pass_people.append(tester_info)
 
-    while priority_que:
-        next_man_sum_rank, next_man_a_rank, next_man_b_rank = heapq.heappop(
-            priority_que
-        )
-
-        if a_rank > next_man_a_rank or b_rank > next_man_b_rank:
-            count += 1
-
-    print(count)
+    print(len(pass_people))
