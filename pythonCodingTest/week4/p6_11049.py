@@ -14,18 +14,29 @@ q = list(map(int, sys.stdin.readline().split()))
 """
 
 # 정답 참고
-# https://ddiyeon.tistory.com/72
+# https://rccode.tistory.com/155
 
-n = int(input())
-mat = [tuple(map(int, input().split())) for i in range(n)]
+input = sys.stdin.readline
 
-dp = [[0] * n for i in range(n)]
-for cnt in range(n - 1):
-    for i in range(n - 1 - cnt):
-        j = i + cnt + 1
-        dp[i][j] = 2**31
-        for k in range(i, j):
-            dp[i][j] = min(
-                dp[i][j], dp[i][k] + dp[k + 1][j] + mat[i][0] * mat[k][1] * mat[j][1]
-            )
-print(dp[0][-1])
+if __name__ == "__main__":
+    N = int(input())
+
+    nums = list(map(int, input().split()))
+    for _ in range(N - 1):
+        _, c = map(int, input().split())
+        nums.append(c)
+
+    # DP
+    dp = [[0] * N for _ in range(N)]
+    for d in range(1, N):
+        for i in range(N - d):
+            j = i + d
+
+            dp[i][j] = float("inf")
+            for k in range(i, j):
+                dp[i][j] = min(
+                    dp[i][j],
+                    dp[i][k] + dp[k + 1][j] + nums[i] * nums[k + 1] * nums[j + 1],
+                )
+
+    print(dp[0][-1])
