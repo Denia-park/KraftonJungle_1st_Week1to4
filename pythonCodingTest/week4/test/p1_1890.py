@@ -24,28 +24,24 @@ TABLE_SIZE = int(input())
 TABLE = [list(map(int, sys.stdin.readline().split())) for _ in range(TABLE_SIZE)]
 
 dp = [[0] * TABLE_SIZE for _ in range(TABLE_SIZE)]
+dp[0][0] = 1
 
-my_que = deque()
-
-my_que.append((0, 0))
-
-directions = [(0, 1), (1, 0)]
-
-while my_que:
-    c_r, c_c = my_que.popleft()
-    jump_num = TABLE[c_r][c_c]
-
-    # 오른쪽 , 아래쪽
-    for move_direc in range(2):
-        e_r = c_r + jump_num * directions[move_direc][0]
-        e_c = c_c + jump_num * directions[move_direc][1]
-
-        if is_out_of_table(e_r, e_c):
+for row in range(TABLE_SIZE):
+    for col in range(TABLE_SIZE):
+        jump_num = TABLE[row][col]
+        if jump_num == 0:
             continue
 
-        if jump_num != 0:
-            dp[e_r][e_c] += 1
-            my_que.append((e_r, e_c))
+        # 아래쪽
+        edit_row = row + jump_num
+        edit_col = col
+        if not is_out_of_table(edit_row, edit_col):
+            dp[edit_row][edit_col] += dp[row][col]
 
+        # 오른쪽
+        edit_row = row
+        edit_col = col + jump_num
+        if not is_out_of_table(edit_row, edit_col):
+            dp[edit_row][edit_col] += dp[row][col]
 
 print(dp[TABLE_SIZE - 1][TABLE_SIZE - 1])
