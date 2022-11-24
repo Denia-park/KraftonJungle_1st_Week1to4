@@ -14,6 +14,8 @@ q = list(map(int, sys.stdin.readline().split()))
 # q = [1, 2, 3, 4, 5]
 """
 
+# bfs로 시간초과 나서 못 풀었습니다 !!
+
 
 def is_out_of_table(row, col):
     return row < 0 or row >= ROW or col < 0 or col >= COL
